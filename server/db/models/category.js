@@ -11,16 +11,45 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Category.hasMany(models.Product, { 
+        foreignKey: 'categoryId',
+        as: 'products'
+      })
+
+      Category.belongsTo(models.Category, {
+        foreignKey: 'parentId',
+        as: 'parent'
+      });
+
+      Category.hasMany(models.Category, {
+        foreignKey: 'parentId',
+        as: 'children'
+      });
     }
   }
   Category.init({
-    name: DataTypes.STRING,
-    slug: DataTypes.STRING,
-    description: DataTypes.STRING,
-    parentId: DataTypes.INTEGER
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    parentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'Category',
+    timestamps: true
   });
+
   return Category;
 };

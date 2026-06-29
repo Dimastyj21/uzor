@@ -21,7 +21,7 @@ module.exports = {
         comment: 'URL идентификатор'
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
         comment: 'полное описание товара'
       },
@@ -32,7 +32,7 @@ module.exports = {
         comment: 'Текущая цена'
       },
       oldPrice: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
         comment: 'Старая цена для отображения скидки'
       },
@@ -70,15 +70,24 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       categoryId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Categories',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
       }
     });
   },
