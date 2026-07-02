@@ -19,6 +19,7 @@ class AuthServices {
 
         const plainNewUser = newUser.get()
         delete plainNewUser.hashpass
+        return plainNewUser
     }
 
     static async findUserByEmail(email) {
@@ -27,20 +28,24 @@ class AuthServices {
         return user ? user.get() : null
     }
 
-    static async signin({ email, password }) {
-        if(!email, !password) {
-            throw new Error('Не все поля!')
+
+    static async checkUser({ email, password }) {
+        if(!email || !password) {
+            throw new Error('Не верный пароль или емаил!')
         }
-        
-        const user = await User.findOne({ where: {email} })
-        if(!user){
-            throw new Error('Пользователь не найден');
+
+        const checkEmail = await AuthServices.findUserByEmail(email)
+
+        if(!checkEmail) {
+            throw new Error('пользователь не найден')
         }
-        const isMatch = await bcrypt.compare(password, user.hashpass)
+
+        const isMatch = await bcrypt.compare(password, checkEmail.hashpass)
         if(!isMatch){
             throw new Error('Неверный пароль');
         }
-        const plainUser = user.get()
+
+        const plainUser = checkEmail.get()
         delete plainUser.hashpass
         return { user: plainUser }
     }
