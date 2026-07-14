@@ -8,8 +8,21 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
+import { useState } from 'react';
+import { RegisterForm } from '@/features/auth/ui/RegisterForm';
+import { Modal } from '@/shared/ui/Modal';
 
 export const Header = () => {
+
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
+
+  const handleOpenRegister = () => {
+    setIsRegisterModalOpen(true)
+  }
+  const handleCloseRegister = () => {
+    setIsRegisterModalOpen(false)
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="primary">
@@ -23,16 +36,20 @@ export const Header = () => {
             </Link>
           </Typography>
           <Link href="/catalog" passHref>
-            <Button color="inherit">Каталог</Button>
+            <Button color="inherit">этоя</Button>
           </Link>
           <Link href="/login" passHref>
             <Button color="inherit">Вход</Button>
           </Link>
-          <Link href="/register" passHref>
-            <Button color="inherit">Регистрация</Button>
-          </Link>
+          <Button color='inherit' onClick={handleOpenRegister}>
+            тут баттан на модал
+          </Button>
         </Toolbar>
       </AppBar>
+
+      <Modal isOpen={isRegisterModalOpen} onClose={handleCloseRegister}>
+        <RegisterForm onSuccess={handleCloseRegister} />
+      </Modal>
     </Box>
   );
 };

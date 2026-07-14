@@ -1,6 +1,5 @@
 import axiosInstance from "@/shared/api/axiosInstance"
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 interface RegisterFormProps {
     onSuccess?: () => void
@@ -17,7 +16,6 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
         password: ''
     })
 
-    const navigate = useNavigate()
 
     const handleSubmit = async ( e: React.FormEvent) => {
 
@@ -29,7 +27,6 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
             const res = await axiosInstance.post("/auth/signup", formData)
                 setUser(res.data.user)
                 setAccessToken(res.data.accessToken)
-                navigate('/')
                 if(onSuccess) onSuccess()
         } catch (err) {
             setError('Ошибка регистрации');
@@ -38,6 +35,7 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
             setLoading(false)
         }
     }
+    
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
