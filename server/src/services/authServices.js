@@ -5,20 +5,21 @@ const { where } = require('sequelize')
 class AuthServices {
 
     static async createUser({ email, name, password }) {
+        // console.log(email,name,password,'---------------------------------------------')
         if(!email || !name || !password) {
             throw new Error('Не все поля')
         }
 
         const hashpass = await bcrypt.hash(password, 10)
 
-        const newUser = await User.create({ email, name, hashpass })
+        const newUser = await User.create({ email, name, password:hashpass })
 
         if(!newUser) {
             throw new Error('Не смог создать юзера!')
         }
 
         const plainNewUser = newUser.get()
-        delete plainNewUser.hashpass
+        delete plainNewUser.password
         return plainNewUser
     }
 
@@ -40,13 +41,13 @@ class AuthServices {
             throw new Error('пользователь не найден')
         }
 
-        const isMatch = await bcrypt.compare(password, checkEmail.hashpass)
+        const isMatch = await bcrypt.compare(password, checkEmail.password)
         if(!isMatch){
             throw new Error('Неверный пароль');
         }
 
         const plainUser = checkEmail.get()
-        delete plainUser.hashpass
+        delete plainUser.password
         return { user: plainUser }
     }
 

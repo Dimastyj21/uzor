@@ -8,9 +8,9 @@ class AuthController {
 
     static async signup(req, res) {
         try {
+            console.log('🔥 req.body:', req.body)
             const user = await AuthServices.createUser(req.body)
-
-            console.log(user)
+            // console.log(user)
 
             const { accessToken, refreshToken } = generateTokens(user)
 

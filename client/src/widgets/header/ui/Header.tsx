@@ -42,7 +42,7 @@ export const Header = () => {
             <Button color="inherit">Вход</Button>
           </Link>
           <Button color='inherit' onClick={handleOpenRegister}>
-            тут баттан на модал
+            регать
           </Button>
         </Toolbar>
       </AppBar>

@@ -48,6 +48,7 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     return(
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
             <h2 className="text-2xl font-bold text-center">Регистрация</h2>
             {error && <div className="text-red-500 text-center">{error}</div>}
 
