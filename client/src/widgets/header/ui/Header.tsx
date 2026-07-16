@@ -11,17 +11,31 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { RegisterForm } from '@/features/auth/ui/RegisterForm';
 import { Modal } from '@/shared/ui/Modal';
+import { LoginForm } from '@/features/auth/ui/LoginForm';
 
 export const Header = () => {
-
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   const handleOpenRegister = () => {
-    setIsRegisterModalOpen(true)
-  }
+    setIsRegisterModalOpen(true);
+  };
   const handleCloseRegister = () => {
-    setIsRegisterModalOpen(false)
-  }
+    setIsRegisterModalOpen(false);
+  };
+  const handleOpenLogin = () => {
+    setIsLoginModalOpen(true);
+  };
+  const handleCloseLogin = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const HandleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -38,17 +52,30 @@ export const Header = () => {
           <Link href="/catalog" passHref>
             <Button color="inherit">этоя</Button>
           </Link>
-          <Link href="/login" passHref>
-            <Button color="inherit">Вход</Button>
-          </Link>
-          <Button color='inherit' onClick={handleOpenRegister}>
-            регать
-          </Button>
+
+          {!user ? (
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <Button color="inherit" onClick={handleOpenLogin}>
+                Вход
+              </Button>
+              <Button color="inherit" onClick={handleOpenRegister}>
+                Зарегистрироваться
+              </Button>
+            </div>
+          ) : (
+            <Button color="inherit" onClick={HandleLogout}>
+              Выход
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 
       <Modal isOpen={isRegisterModalOpen} onClose={handleCloseRegister}>
         <RegisterForm onSuccess={handleCloseRegister} />
+      </Modal>
+
+      <Modal isOpen={isLoginModalOpen} onClose={handleCloseLogin}>
+        <LoginForm onSuccess={handleCloseLogin} />
       </Modal>
     </Box>
   );
